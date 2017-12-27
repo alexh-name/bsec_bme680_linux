@@ -21,10 +21,18 @@ Readings will be directly output to stdout in a loop.
 [Download the BSEC software package from Bosch](https://www.bosch-sensortec.com/bst/products/all_products/bsec)
 and put it into `./src`, then unpack.
 
-## Compile
+## Configure and Compile
 
-Optionally make changes to make.config.  
-Otherwise: `./make.sh`
+Optionally make changes to make.config.
+
+Depending on how your sensor is embedded it might be surrounded by other
+components giving off heat. Use an offset in °C in `bsec_bme680.c` to
+compensate. The default is 5 °C:
+```
+#define temp_offset (5.0f)
+```
+
+To compile: `./make.sh`
 
 ## Usage
 
