@@ -193,7 +193,7 @@ void output_ready(int64_t timestamp, float iaq, uint8_t iaq_accuracy,
   printf("[IAQ (%d)]: %.2f", iaq_accuracy, iaq);
   printf(",[T degC]: %.2f,[H %%rH]: %.2f,[P hPa]: %.2f", temperature,
          humidity,pressure / 100);
-  printf(",[G Ohms]: %.2f", gas);
+  printf(",[G Ohms]: %.0f", gas);
   printf(",[S]: %d", bsec_status);
   //printf(",%" PRId64, timestamp);
   //printf(",%" PRId64, timestamp_ms);
