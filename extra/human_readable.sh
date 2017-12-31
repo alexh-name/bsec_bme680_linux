@@ -3,7 +3,7 @@
 
 # this will check a CSV from BME680 + BSEC readings for some significant change
 # and gives feedback in form of a sentence. useful for automatic notifications.
-# bc is needed for float comparison.
+# bc is needed for float operations.
 
 # you may want to use an output like this to get some simple CSV format.
 # to get the output of bsec_bme680 to a file you can use tee or output
@@ -23,10 +23,14 @@ set -eu
 ### setup ###
 
 LOGFILE="./log.csv"
-INTERVAL=3 # seconds
+INTERVAL=30 # seconds, should be multiple of BME_INTERVAL
+
+BME_INTERVAL=3 # seconds, interval of measurements
 
 LS=''
 OUTPUT=''
+OUT_Q=0
+OUT_COUNTER=0
 PROBLEM=0 # problem status. unused currently.
 FEEDBACKS='' # list of reading types that already gave feedback
 EMPTY_ARR[0]=0 # used to clear the status array
@@ -38,6 +42,13 @@ STATUS_STRING_PAST=''
 STATUS_STRING=''
 NL='
 '
+D=''    # date
+I_A='0' # IAQ accuracy
+I='0'   # IAQ
+T='0'   # temperature
+H='0'   # humidity
+P='0'   # pressure
+S='0'   # BSEC status
 
 A_LIMIT_1=0.99
 A_LIMIT_2=1.99
@@ -51,6 +62,8 @@ T_LIMIT_UP='22.51'
 T_LIMIT_DOWN='19.49'
 H_LIMIT_UP='60.01'
 H_LIMIT_DOWN='29.99'
+
+OUT_Q=$(( ${INTERVAL} / ${BME_INTERVAL} ))
 
 ### functions ###
 
@@ -164,58 +177,81 @@ limit_trigger () {
   ARRAY_COUNTER=$(( ARRAY_COUNTER + 1 ))
 }
 
+output () {
+
+  #out_readings
+
+  # get means
+  I_A="$( printf "%s\n" "scale=2; ${I_A}/${OUT_COUNTER}" | bc -l )"
+  I="$( printf "%s\n" "scale=2; ${I}/${OUT_COUNTER}" | bc -l )"
+  T="$( printf "%s\n" "scale=2; ${T}/${OUT_COUNTER}" | bc -l )"
+  H="$( printf "%s\n" "scale=2; ${H}/${OUT_COUNTER}" | bc -l )"
+  P="$( printf "%s\n" "scale=2; ${P}/${OUT_COUNTER}" | bc -l )"
+
+  # type; reading; limit; direction; message; problem 0|1; extra function
+  # make sure to arrange triggers of same type from worst to most harmless
+  limit_trigger 'air' "${I}" "${I_LIMIT_5}" 'up' "VERY BAD air [${I}]" "1" ""
+  limit_trigger 'air' "${I}" "${I_LIMIT_4}" 'up' "WORSE air [${I}]" "1" ""
+  limit_trigger 'air' "${I}" "${I_LIMIT_3}" 'up' "BAD air [${I}]" "1" ""
+  limit_trigger 'air' "${I}" "${I_LIMIT_2}" 'up' "little BAD air [${I}]" "1" ""
+  limit_trigger 'air' "${I}" "${I_LIMIT_1}" 'up' "average air [${I}]" "1" ""
+  limit_trigger 'air' "${I}" "${I_LIMIT_1}" 'down' "good air [${I}]" "0" ""
+  limit_trigger 'acc' "${I_A}" "${A_LIMIT_1}" 'down' "(I'm very unsure though)" "0" ""
+  limit_trigger 'acc' "${I_A}" "${A_LIMIT_2}" 'down' "(I'm unsure though)" "0" ""
+  limit_trigger 'acc' "${I_A}" "${A_LIMIT_3}" 'down' "(I'm not fully sure though)" "0" ""
+  limit_trigger 'temp' "${T}" "${T_LIMIT_UP}" 'up' "it's warm [${T}°C]" "1" ""
+  limit_trigger 'temp' "${T}" "${T_LIMIT_DOWN}" 'down' "it's cold [${T}°C]" "1" ""
+  limit_trigger 'hum' "${H}" "${H_LIMIT_UP}" 'up' "it's dank [${H}%rH]" "1" ""
+  limit_trigger 'hum' "${H}" "${H_LIMIT_DOWN}" 'down' "it's dry [${H}%rH]" "1" ""
+
+  # array to string for comparison
+  STATUS_STRING="$( printf "%s" "${STATUS_ARR[@]}" )"
+
+  if [ "${STATUS_STRING}" != "${STATUS_STRING_PAST}" ]; then
+    # print output and remove leading or trailing whitespace and conjunction hints
+    # also uppercase first letter
+    OUTPUT="$( printf "%s" "${OUTPUT}" | sed -e 's/^,*\ *//' -e 's/[10]\ *$//' )"
+    upper="$( printf "%s" "${OUTPUT}" | cut -c 1 | tr [:lower:] [:upper:] )"
+    printf "%s\n" "${OUTPUT}" | sed "s/^./${upper}/"
+  fi
+  STATUS_STRING_PAST="${STATUS_STRING}"
+
+  #if [ $PROBLEM -ne 0 ]; then
+  #  return 1
+  #fi
+}
+
 ### loop ###
 
 main () {
+  lstatus
 
-lstatus
+  OUT_COUNTER=$(( ${OUT_COUNTER} + 1 ))
 
-D="$( sv 1 )"   # date
-I_A="$( sv 2 )" # IAQ accuracy
-I="$( sv 3 )"   # IAQ
-T="$( sv 4 )"   # temperature
-H="$( sv 5 )"   # humidity
-P="$( sv 6 )"   # pressure
-S="$( sv 8 )"   # BSEC status
-
-# type; reading; limit; direction; message; problem 0|1; extra function
-# make sure to arrange triggers of same type from worst to most harmless 
-limit_trigger 'air' "${I}" "${I_LIMIT_5}" 'up' "VERY BAD air [${I}]" "1" ""
-limit_trigger 'air' "${I}" "${I_LIMIT_4}" 'up' "WORSE air [${I}]" "1" ""
-limit_trigger 'air' "${I}" "${I_LIMIT_3}" 'up' "BAD air [${I}]" "1" ""
-limit_trigger 'air' "${I}" "${I_LIMIT_2}" 'up' "little BAD air [${I}]" "1" ""
-limit_trigger 'air' "${I}" "${I_LIMIT_1}" 'up' "average air [${I}]" "1" ""
-limit_trigger 'air' "${I}" "${I_LIMIT_1}" 'down' "good air [${I}]" "0" ""
-limit_trigger 'acc' "${I_A}" "${A_LIMIT_1}" 'down' "(I'm very unsure though)" "0" ""
-limit_trigger 'acc' "${I_A}" "${A_LIMIT_2}" 'down' "(I'm unsure though)" "0" ""
-limit_trigger 'acc' "${I_A}" "${A_LIMIT_3}" 'down' "(I'm not fully sure though)" "0" ""
-limit_trigger 'temp' "${T}" "${T_LIMIT_UP}" 'up' "it's warm [${T}°C]" "1" ""
-limit_trigger 'temp' "${T}" "${T_LIMIT_DOWN}" 'down' "it's cold [${T}°C]" "1" ""
-limit_trigger 'hum' "${H}" "${H_LIMIT_UP}" 'up' "it's dank [${H}%rH]" "1" ""
-limit_trigger 'hum' "${H}" "${H_LIMIT_DOWN}" 'down' "it's dry [${H}%rH]" "1" ""
-
-#out_readings
-
-# array to string for comparison
-STATUS_STRING="$( printf "%s" "${STATUS_ARR[@]}" )"
-
-if [ "${STATUS_STRING}" != "${STATUS_STRING_PAST}" ]; then
-  # print output and remove leading or trailing whitespace and conjunction hints
-  # also uppercase first letter
-  OUTPUT="$( printf "%s" "${OUTPUT}" | sed -e 's/^,*\ *//' -e 's/[10]\ *$//' )"
-  upper="$( printf "%s" "${OUTPUT}" | cut -c 1 | tr [:lower:] [:upper:] )"
-  printf "%s\n" "${OUTPUT}" | sed "s/^./${upper}/"
-fi
-STATUS_STRING_PAST="${STATUS_STRING}"
- 
-#if [ $PROBLEM -ne 0 ]; then
-#  return 1
-#fi
+  # add up readings that we want means from
+  D="$( sv 1 )"
+  I_A="$( printf "%s\n" "${I_A}+$( sv 2 )" | bc -l )"
+  I="$( printf "%s\n" "${I}+$( sv 3 )" | bc -l )"
+  T="$( printf "%s\n" "${T}+$( sv 4 )" | bc -l )"
+  H="$( printf "%s\n" "${H}+$( sv 5 )" | bc -l )"
+  P="$( printf "%s\n" "${P}+$( sv 6 )" | bc -l )"
+  S="$( sv 8 )"
 }
 
 while true; do
   main
+  if [ ${OUT_Q} -eq ${OUT_COUNTER} ]; then
+    output
+    OUT_COUNTER=0
+    D='0'
+    I_A='0'
+    I='0'
+    T='0'
+    H='0'
+    P='0'
+    S='0'
+  fi
   clear
-  sleep ${INTERVAL}
+  sleep ${BME_INTERVAL}
 done
 
