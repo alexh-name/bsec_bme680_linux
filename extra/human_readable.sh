@@ -213,6 +213,10 @@ output () {
     OUTPUT="$( printf "%s" "${OUTPUT}" | sed -e 's/^,*\ *//' -e 's/[10]\ *$//' )"
     upper="$( printf "%s" "${OUTPUT}" | cut -c 1 | tr [:lower:] [:upper:] )"
     printf "%s\n" "${OUTPUT}" | sed "s/^./${upper}/"
+
+    # you could also tweet the output:
+    # t update "$( printf "%s\n" "${OUTPUT}" | sed "s/^./${upper}/" )" \
+    #   &> /dev/null || true
   fi
   STATUS_STRING_PAST="${STATUS_STRING}"
 
