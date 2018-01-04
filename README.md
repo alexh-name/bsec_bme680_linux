@@ -54,3 +54,9 @@ The BSEC library is supposed to create an internal state of calibration with
 increasing accuracy over time. Each 10.000 samples it will save the internal
 calibration state to `./bsec_iaq.state` (or wherever you specify the config
 directory to be) so it can pick up where it was after interruption.
+
+## Further
+
+You can find a growing list of tools to further use and visualize the data
+[here](https://github.com/alexh-name/bme680_outputs).
+
