@@ -21,7 +21,7 @@ cc -Wall -static \
   "${BSEC_DIR}"/API/bme680.c \
   "${BSEC_DIR}"/example/bsec_integration.c \
   ./bsec_bme680.c \
-  -L"${BSEC_DIR}"/"${ARCH}" -lalgobsec \
+  -L"${BSEC_DIR}"/algo/bin/"${ARCH}" -lalgobsec \
   -lm -lrt \
   -o bsec_bme680
 echo 'Compiled.'
