@@ -60,3 +60,9 @@ directory to be) so it can pick up where it was after interruption.
 You can find a growing list of tools to further use and visualize the data
 [here](https://github.com/alexh-name/bme680_outputs).
 
+## Troubleshooting
+
+### bsec_bme680 just quits without a message
+
+Your bsec_iaq.state file might be corrupt or incompatible after an update. Try moving it.
+
