@@ -16,7 +16,7 @@ fi
 echo 'Compiling...'
 cc -Wall -static \
   -iquote"${BSEC_DIR}"/API \
-  -iquote"${BSEC_DIR}"/algo \
+  -iquote"${BSEC_DIR}"/algo/bin/${ARCH} \
   -iquote"${BSEC_DIR}"/example \
   "${BSEC_DIR}"/API/bme680.c \
   "${BSEC_DIR}"/example/bsec_integration.c \
