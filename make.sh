@@ -14,7 +14,7 @@ if [ ! -d "${CONFIG_DIR}" ]; then
 fi
 
 echo 'Compiling...'
-cc -Wall -static \
+cc -Wall -Wno-unused-but-set-variable -Wno-unused-variable -static \
   -iquote"${BSEC_DIR}"/API \
   -iquote"${BSEC_DIR}"/algo/bin/${ARCH} \
   -iquote"${BSEC_DIR}"/example \
