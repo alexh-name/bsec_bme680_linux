@@ -13,6 +13,11 @@ if [ ! -d "${CONFIG_DIR}" ]; then
   mkdir "${CONFIG_DIR}"
 fi
 
+STATEFILE="${CONFIG_DIR}/bsec_iaq.state"
+if [ ! -f "${STATEFILE}" ]; then
+  touch "${STATEFILE}"
+fi
+
 echo 'Compiling...'
 cc -Wall -Wno-unused-but-set-variable -Wno-unused-variable -static \
   -iquote"${BSEC_DIR}"/API \
