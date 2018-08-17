@@ -223,7 +223,8 @@ uint32_t binary_load(uint8_t *b_buffer, uint32_t n_buffer, char *filename,
   struct stat fileinfo;
   rslt = stat(filename, &fileinfo);
   if (rslt != 0) {
-    perror("stat'ing binary file");
+    fprintf(stderr,"stat'ing binary file %s: ",filename);
+    perror("");
     return 0;
   }
 
@@ -243,7 +244,7 @@ uint32_t binary_load(uint8_t *b_buffer, uint32_t n_buffer, char *filename,
     fseek(file_ptr,offset,SEEK_SET);
     copied_bytes = fread(b_buffer,sizeof(char),filesize,file_ptr);
     if (copied_bytes == 0) {
-      fprintf(stderr,"%s\n","binary_load");
+      fprintf(stderr,"%s empty\n",filename);
     }
     fclose(file_ptr);
     return copied_bytes;
