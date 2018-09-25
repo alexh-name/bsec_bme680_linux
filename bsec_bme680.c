@@ -181,6 +181,7 @@ void output_ready(int64_t timestamp, float iaq, uint8_t iaq_accuracy,
                   bsec_library_return_t bsec_status,
                   float static_iaq, float co2_equivalent,
                   float breath_voc_equivalent)
+{
   //int64_t timestamp_s = timestamp / 1000000000;
   ////int64_t timestamp_ms = timestamp / 1000;
 
