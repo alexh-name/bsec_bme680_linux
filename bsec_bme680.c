@@ -172,6 +172,9 @@ int64_t get_timestamp_us()
  * param[in]       raw_humidity    raw humidity signal
  * param[in]       gas             raw gas sensor signal
  * param[in]       bsec_status     value returned by the bsec_do_steps() call
+ * param[in]       static_iaq
+ * param[in]       co2_equivalent
+ * param[in]       breath_voc_equivalent
  *
  * return          none
  */
@@ -200,6 +203,9 @@ void output_ready(int64_t timestamp, float iaq, uint8_t iaq_accuracy,
          humidity,pressure / 100);
   printf(",[G Ohms]: %.0f", gas);
   printf(",[S]: %d", bsec_status);
+  //printf(",[static IAQ]: %.2f", static_iaq);
+  //printf(",[CO2 eq.]: %.2f", co2_equivalent);
+  //printf(",[Breath VOC eq.]: %.2f", breath_voc_equivalent);
   //printf(",%" PRId64, timestamp);
   //printf(",%" PRId64, timestamp_ms);
   printf("\r\n");
