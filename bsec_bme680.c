@@ -170,9 +170,9 @@ int64_t get_timestamp_us()
  * param[in]       raw_humidity    raw humidity signal
  * param[in]       gas             raw gas sensor signal
  * param[in]       bsec_status     value returned by the bsec_do_steps() call
- * param[in]       static_iaq
- * param[in]       co2_equivalent
- * param[in]       breath_voc_equivalent
+ * param[in]       static_iaq      unscaled indoor-air-quality estimate
+ * param[in]       co2_equivalent  CO2 equivalent estimate [ppm]
+ * param[in]       breath_voc_equivalent  breath VOC concentration estimate [ppm]
  *
  * return          none
  */
