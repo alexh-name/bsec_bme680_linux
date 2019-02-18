@@ -20,9 +20,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <linux/i2c-dev.h>
-#include "bsec_datatypes.h"
 #include "bsec_integration.h"
-#include "bme680.h"
 
 /* definitions */
 
