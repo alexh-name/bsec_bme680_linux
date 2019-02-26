@@ -18,6 +18,9 @@ if [ ! -f "${STATEFILE}" ]; then
   touch "${STATEFILE}"
 fi
 
+echo 'Patching...'
+patch "${BSEC_DIR}"/examples/ < patches/eCO2+bVOCe.diff
+
 echo 'Compiling...'
 cc -Wall -Wno-unused-but-set-variable -Wno-unused-variable -static \
   -iquote"${BSEC_DIR}"/API \
