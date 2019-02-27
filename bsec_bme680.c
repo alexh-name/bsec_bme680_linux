@@ -202,8 +202,8 @@ void output_ready(int64_t timestamp, float iaq, uint8_t iaq_accuracy,
   printf(",[G Ohms]: %.0f", gas);
   printf(",[S]: %d", bsec_status);
   //printf(",[static IAQ]: %.2f", static_iaq);
-  printf(",[eCO2 ppm]: %.2f", co2_equivalent);
-  printf(",[bVOCe ppm]: %.2f", breath_voc_equivalent);
+  printf(",[eCO2 ppm]: %.15f", co2_equivalent);
+  printf(",[bVOCe ppm]: %.25f", breath_voc_equivalent);
   //printf(",%" PRId64, timestamp);
   //printf(",%" PRId64, timestamp_ms);
   printf("\r\n");
