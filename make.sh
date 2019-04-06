@@ -19,7 +19,15 @@ if [ ! -f "${STATEFILE}" ]; then
 fi
 
 echo 'Patching...'
-patch -d "${BSEC_DIR}"/examples/ < patches/eCO2+bVOCe.diff
+dir="${BSEC_DIR}/examples"
+patch='patches/eCO2+bVOCe.diff'
+if patch -dN --dry-run --silent "${dir}/" \
+  < "${patch}" 2>/dev/null
+then
+  patch -d "${dir}/" < "${patch}"
+else
+  echo 'Already applied.'
+fi
 
 echo 'Compiling...'
 cc -Wall -Wno-unused-but-set-variable -Wno-unused-variable -static \
