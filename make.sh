@@ -23,6 +23,7 @@ patch -d "${BSEC_DIR}"/examples/ < patches/eCO2+bVOCe.diff
 
 echo 'Compiling...'
 cc -Wall -Wno-unused-but-set-variable -Wno-unused-variable -static \
+  -std=c99 -pedantic \
   -iquote"${BSEC_DIR}"/API \
   -iquote"${BSEC_DIR}"/algo/bin/${ARCH} \
   -iquote"${BSEC_DIR}"/examples \

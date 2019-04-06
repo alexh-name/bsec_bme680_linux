@@ -7,6 +7,9 @@
  *
  */
 
+/*#define _POSIX_C_SOURCE 200809L*/
+#define _XOPEN_SOURCE 700
+
 /* header files */
 
 #include <stdio.h>
@@ -77,8 +80,9 @@ int8_t bus_write(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_data_ptr,
 
   uint8_t reg[16];
   reg[0]=reg_addr;
+  int i;
 
-  for (int i=1; i<data_len+1; i++)
+  for (i=1; i<data_len+1; i++)
     reg[i] = reg_data_ptr[i-1];
 
   if (write(g_i2cFid, reg, data_len+1) != data_len+1) {
