@@ -21,7 +21,7 @@ fi
 echo 'Patching...'
 dir="${BSEC_DIR}/examples"
 patch='patches/eCO2+bVOCe.diff'
-if patch -dN --dry-run --silent "${dir}/" \
+if patch -N --dry-run --silent -d "${dir}/" \
   < "${patch}" 2>/dev/null
 then
   patch -d "${dir}/" < "${patch}"
