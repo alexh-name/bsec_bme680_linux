@@ -33,12 +33,12 @@ echo 'Compiling...'
 cc -Wall -Wno-unused-but-set-variable -Wno-unused-variable -static \
   -std=c99 -pedantic \
   -iquote"${BSEC_DIR}"/API \
-  -iquote"${BSEC_DIR}"/algo/bin/${ARCH} \
+  -iquote"${BSEC_DIR}"/algo/${ARCH} \
   -iquote"${BSEC_DIR}"/examples \
   "${BSEC_DIR}"/API/bme680.c \
   "${BSEC_DIR}"/examples/bsec_integration.c \
   ./bsec_bme680.c \
-  -L"${BSEC_DIR}"/algo/bin/"${ARCH}" -lalgobsec \
+  -L"${BSEC_DIR}"/algo/"${ARCH}" -lalgobsec \
   -lm -lrt \
   -o bsec_bme680
 echo 'Compiled.'
