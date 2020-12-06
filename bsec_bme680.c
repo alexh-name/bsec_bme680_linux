@@ -32,7 +32,7 @@
 #define sample_rate_mode (BSEC_SAMPLE_RATE_LP)
 
 int g_i2cFid; // I2C Linux device handle
-int i2c_address = BME680_I2C_ADDR_PRIMARY;
+int i2c_address = BME680_I2C_ADDR_SECONDARY;
 char *filename_state = "bsec_iaq.state";
 char *filename_config = "bsec_iaq.config";
 

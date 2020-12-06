@@ -4,6 +4,14 @@ set  -eu
 
 . ./make.config
 
+mkdir src
+cd src
+wget https://www.bosch-sensortec.com/media/boschsensortec/downloads/bsec/bsec_1-4-8-0_generic_release.zip
+unzip *zip
+rm *zip
+cd ..
+
+
 if [ ! -d "${BSEC_DIR}" ]; then
   echo 'BSEC directory missing.'
   exit 1
