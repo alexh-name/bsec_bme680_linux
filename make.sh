@@ -18,17 +18,6 @@ if [ ! -f "${STATEFILE}" ]; then
   touch "${STATEFILE}"
 fi
 
-echo 'Patching...'
-dir="${BSEC_DIR}/examples/bsec_iot_example"
-patch='patches/eCO2+bVOCe.diff'
-if patch -N --dry-run --silent -d "${dir}/" \
-  < "${patch}" 2>/dev/null
-then
-  patch -d "${dir}/" < "${patch}"
-else
-  echo 'Already applied.'
-fi
-
 EXAMPLES_DIR="${BSEC_DIR}/examples/bsec_iot_example"
 
 echo 'Compiling...'
