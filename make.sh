@@ -1,5 +1,6 @@
 #!/bin/sh
-set -x
+
+#set -x
 set  -eu
 
 . ./make.config
