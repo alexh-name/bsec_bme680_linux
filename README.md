@@ -67,18 +67,18 @@ You can find a growing list of tools to further use and visualize the data
 Your bsec_iaq.state file might be corrupt or incompatible after an update of the
 BSEC library. Try (re)moving it.
 
-### Got remote I/O error before the read start
+### remote I/O error
 
-If got `user_i2c_write: Remote I/O error` when start the compiled code, it may caused by the sensor breakout board's I2C adress setting. (The popular [CJMCU-680](https://www.ebay.de/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw=CJMCU-680&_sacat=0) would preconfigured to use sensor's secondary I2C adress as default). You can check this by (on raspberry pi):
+If you get `user_i2c_write: Remote I/O error` on run time, check the I2C address used by your version of the sensor:
 ```
 sudo i2cdetect -y 1
 ```
-if you find a device on `77` but not on `76`, then your sensor is configured to use it's secondary I2C adress. In this case, you can replace in file bsec_bme680.c the line
+If you find a device on `77` but not on `76`, then your sensor is configured to use its secondary I2C address. In this case, change this at the beginning of `bsec_bme680.c`:
 ```
 int i2c_address = BME680_I2C_ADDR_PRIMARY;
 ```
-with
+to
 ```
 int i2c_address = BME680_I2C_ADDR_SECONDARY;
 ```
-and recompile
+and recompile (`./make.sh`).
