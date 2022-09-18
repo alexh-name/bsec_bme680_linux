@@ -62,6 +62,10 @@ You can find a growing list of tools to further use and visualize the data
 
 ## Troubleshooting
 
+### Raspberry Pi
+
+Make sure you enabled I2C functionality first.
+
 ### bsec_bme680 just quits without a message
 
 Your bsec_iaq.state file might be corrupt or incompatible after an update of the
