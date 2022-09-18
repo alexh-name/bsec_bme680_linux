@@ -136,7 +136,7 @@ int8_t bus_read(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_data_ptr,
 void _sleep(uint32_t t_ms)
 {
   struct timespec ts;
-  ts.tv_sec = 0;
+  ts.tv_sec = t_ms / 1000;
   /* mod because nsec must be in the range 0 to 999999999 */
   ts.tv_nsec = (t_ms % 1000) * 1000000L;
   nanosleep(&ts, NULL);
