@@ -67,3 +67,18 @@ You can find a growing list of tools to further use and visualize the data
 Your bsec_iaq.state file might be corrupt or incompatible after an update of the
 BSEC library. Try (re)moving it.
 
+### remote I/O error
+
+If you get `user_i2c_write: Remote I/O error` on run time, check the I2C address used by your version of the sensor:
+```
+sudo i2cdetect -y 1
+```
+If you find a device on `77` but not on `76`, then your sensor is configured to use its secondary I2C address. In this case, change this at the beginning of `bsec_bme680.c`:
+```
+int i2c_address = BME680_I2C_ADDR_PRIMARY;
+```
+to
+```
+int i2c_address = BME680_I2C_ADDR_SECONDARY;
+```
+and recompile (`./make.sh`).
