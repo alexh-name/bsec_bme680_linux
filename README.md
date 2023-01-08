@@ -89,6 +89,7 @@ and recompile (`./make.sh`).
 
 ## Checksums of supported BSEC versions:
 
+```
 63ad6fe8f797aa49fef9db31bb380248cb5dc3d08a237698a987b9a31dde4be1  BSEC_1.4.5.1_Generic_Release_20171214.zip
 4fcd01568e877d16e3e520f76de5c0d352c793a5604622061d3ee4291e83f887  BSEC_1.4.6.0_Generic_Release_20180323.zip
 d4b1d633a55b8238814656f2a056968d25f59a14c9c809504bc54a4988a8b1c0  BSEC_1.4.6.0_Generic_Release_20180425.zip
@@ -97,4 +98,5 @@ fb64f03fded01d44fc5fc1ef65934cb3ff089a14e2af5f7c12f9394f92c83192  BSEC_1.4.7.2_G
 587c1e6a2a0823d279cda6c59bfcd753e3375444c4d66ab39d92b12fecc9d8b5  BSEC_1.4.7.3_Generic_Release_20190410.zip
 d063e2af886656d51aa6787ae9975d932e297448e531a1692e93371a6e575042  BSEC_1.4.7.4_Generic_Release.zip
 c56d537538c07db4a778a332ef65f203e4eac2113953f7a104e838d9f6af31e5  bsec_1-4-8-0_generic_release.zip
+```
 
